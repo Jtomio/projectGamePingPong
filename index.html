@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style.css">
+    <title>Ping Pong Game</title>
+</head>
+<body>
+    <!-- criação do canvas para definir a mesa -->
+    <canvas id="folha" width="600" height="500"></canvas>
+
+    <!-- importa config script  -->
+    <script>
+        // define variável do id do canvas no html
+        var folhaDesenho = document.getElementById("folha");
+        var areaDesenho = folhaDesenho.getContext("2d");
+
+        // define dimensão do campo
+        areaDesenho.fillStyle = '#286047';
+        areaDesenho.fillRect(0, 0, 600, 500);
+
+        // define linha do centro
+        areaDesenho.fillStyle = '#fff';
+        areaDesenho.fillRect(297.5, 0, 5, 500);
+
+        // define a raquete player 1
+        areaDesenho.fillRect(0, 30, 5, 50);
+
+        // define a raquete player 2
+        areaDesenho.fillRect(595, 30, 5, 50);
+
+        // define a bola do ping pong
+        areaDesenho.fillRect(30, 30, 7, 7);
+
+
+    </script>
+</body>
+</html>

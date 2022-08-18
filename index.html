@@ -1,40 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/style.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/style.css" />
     <title>Ping Pong Game</title>
-</head>
-<body>
+  </head>
+  <body>
     <!-- criação do canvas para definir a mesa -->
     <canvas id="folha" width="600" height="500"></canvas>
 
     <!-- importa config script  -->
     <script>
+      // Função de intervalo de tempo para execução
+      window.onload = function () {
+        setInterval(executar, 1000 / 30);
+      };
+
+    //   Posição inicial da bola
+      var posicaoBolaX = (posicaoBolaY = 10);
+
+      function executar() {
         // define variável do id do canvas no html
         var folhaDesenho = document.getElementById("folha");
         var areaDesenho = folhaDesenho.getContext("2d");
 
+        var larguraCampo = 600;
+        var alturaCampo = 500;
+        var larguraLinha = 5;
+        var larguraBola = 5;
+        var alturaRaquete = 50;
+
+        
+        var diametroBola = 10;
+
         // define dimensão do campo
-        areaDesenho.fillStyle = '#286047';
-        areaDesenho.fillRect(0, 0, 600, 500);
+        areaDesenho.fillStyle = "#286047";
+        areaDesenho.fillRect(0, 0, larguraCampo, alturaCampo);
 
         // define linha do centro
-        areaDesenho.fillStyle = '#fff';
-        areaDesenho.fillRect(297.5, 0, 5, 500);
+        areaDesenho.fillStyle = "#fff";
+        areaDesenho.fillRect(
+          larguraCampo / 2 - larguraLinha / 2,
+          0,
+          larguraLinha,
+          alturaCampo
+        );
 
         // define a raquete player 1
-        areaDesenho.fillRect(0, 30, 5, 50);
+        areaDesenho.fillRect(0, 30, larguraLinha, alturaRaquete);
 
         // define a raquete player 2
-        areaDesenho.fillRect(595, 30, 5, 50);
+        areaDesenho.fillRect(
+          larguraCampo - larguraLinha,
+          30,
+          larguraLinha,
+          alturaRaquete
+        );
 
         // define a bola do ping pong
-        areaDesenho.fillRect(30, 30, 7, 7);
+        areaDesenho.fillRect(
+          posicaoBolaX - diametroBola / 2,
+          posicaoBolaY - diametroBola / 2,
+          diametroBola,
+          diametroBola
+        );
 
-
+        posicaoBolaX = posicaoBolaX + 1;
+        posicaoBolaY = posicaoBolaY + 1;
+      }
     </script>
-</body>
+    <script src="/script.js"></script>
+  </body>
 </html>

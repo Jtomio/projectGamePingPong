@@ -1,76 +1,148 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/style.css" />
-    <title>Ping Pong Game</title>
-  </head>
-  <body>
-    <!-- criação do canvas para definir a mesa -->
-    <canvas id="folha" width="600" height="500"></canvas>
+<html>
+	<body>
+		<canvas id="folha" width="600" height="500"></canvas>
+		<script>
+			window.onload = function () {
+				setInterval(executar, 1000 / 30);
+			};
 
-    <!-- importa config script  -->
-    <script>
-      // Função de intervalo de tempo para execução
-      window.onload = function () {
-        setInterval(executar, 1000 / 30);
-      };
+			var folhaDesenho = document.getElementById('folha');
+			var areaDesenho = folhaDesenho.getContext('2d');
 
-    //   Posição inicial da bola
-      var posicaoBolaX = (posicaoBolaY = 10);
+			var larguraCampo = 600;
+			var alturaCampo = 500;
+			var espessuraRede = 5;
 
-      function executar() {
-        // define variável do id do canvas no html
-        var folhaDesenho = document.getElementById("folha");
-        var areaDesenho = folhaDesenho.getContext("2d");
+			var diametroBola = 10;
 
-        var larguraCampo = 600;
-        var alturaCampo = 500;
-        var larguraLinha = 5;
-        var larguraBola = 5;
-        var alturaRaquete = 50;
+			var espessuraRaquete = 11;
+			var alturaRaquete = 100;
 
-        
-        var diametroBola = 10;
+			var efeitoRaquete = 0.3;
+			var velocidadeJogador2 = 5;
 
-        // define dimensão do campo
-        areaDesenho.fillStyle = "#286047";
-        areaDesenho.fillRect(0, 0, larguraCampo, alturaCampo);
+			var posicaoJogador1 = (posicaoJogador2 = 10);
+			var posicaoBolaX = (posicaoBolaY = 10);
+			var velocidadeBolaPosicaoX = (velocidadeBolaPosicaoY = 5);
+			var pontuacaoJogador1 = (pontuacaoJogador2 = 0);
 
-        // define linha do centro
-        areaDesenho.fillStyle = "#fff";
-        areaDesenho.fillRect(
-          larguraCampo / 2 - larguraLinha / 2,
-          0,
-          larguraLinha,
-          alturaCampo
-        );
+			folhaDesenho.addEventListener('mousemove', function (e) {
+				posicaoJogador1 = e.clientY - alturaRaquete / 2;
+			});
 
-        // define a raquete player 1
-        areaDesenho.fillRect(0, 30, larguraLinha, alturaRaquete);
+			function executar() {
+				areaDesenho.fillStyle = '#286047';
+				areaDesenho.fillRect(0, 0, larguraCampo, alturaCampo);
 
-        // define a raquete player 2
-        areaDesenho.fillRect(
-          larguraCampo - larguraLinha,
-          30,
-          larguraLinha,
-          alturaRaquete
-        );
+				areaDesenho.fillStyle = '#ffffff';
 
-        // define a bola do ping pong
-        areaDesenho.fillRect(
-          posicaoBolaX - diametroBola / 2,
-          posicaoBolaY - diametroBola / 2,
-          diametroBola,
-          diametroBola
-        );
+				// Linha
+				areaDesenho.fillRect(
+					larguraCampo / 2 - espessuraRede / 2,
+					0,
+					espessuraRede,
+					alturaCampo,
+				);
 
-        posicaoBolaX = posicaoBolaX + 1;
-        posicaoBolaY = posicaoBolaY + 1;
-      }
-    </script>
-    <script src="/script.js"></script>
-  </body>
+				// Desenha a bola
+				areaDesenho.fillRect(
+					posicaoBolaX - diametroBola / 2,
+					posicaoBolaY - diametroBola / 2,
+					diametroBola,
+					diametroBola,
+				);
+
+				// Raquetes
+				areaDesenho.fillRect(
+					0,
+					posicaoJogador1,
+					espessuraRaquete,
+					alturaRaquete,
+				);
+				areaDesenho.fillRect(
+					larguraCampo - espessuraRaquete,
+					posicaoJogador2,
+					espessuraRaquete,
+					alturaRaquete,
+				);
+
+				areaDesenho.fillText(
+					'Humano - ' + pontuacaoJogador1 + ' pontos',
+					100,
+					100,
+				);
+				areaDesenho.fillText(
+					'Computador - ' + pontuacaoJogador2 + ' pontos',
+					larguraCampo - 200,
+					100,
+				);
+
+				posicaoBolaX = posicaoBolaX + velocidadeBolaPosicaoX;
+				posicaoBolaY = posicaoBolaY + velocidadeBolaPosicaoY;
+
+				// Verifica a lateral superior
+				if (posicaoBolaY < 0 && velocidadeBolaPosicaoY < 0) {
+					velocidadeBolaPosicaoY = -velocidadeBolaPosicaoY;
+				}
+
+				// Verifica a lateral inferior
+				if (posicaoBolaY > alturaCampo && velocidadeBolaPosicaoY > 0) {
+					velocidadeBolaPosicaoY = -velocidadeBolaPosicaoY;
+				}
+
+				// Verifica se o Jogador 2 fez um ponto
+				if (posicaoBolaX < 0) {
+					if (
+						posicaoBolaY > posicaoJogador1 &&
+						posicaoBolaY < posicaoJogador1 + alturaRaquete
+					) {
+						// Rebate a bola
+						velocidadeBolaPosicaoX = -velocidadeBolaPosicaoX;
+
+						var diferencaY =
+							posicaoBolaY - (posicaoJogador1 + alturaRaquete / 2);
+						velocidadeBolaPosicaoY = diferencaY * efeitoRaquete;
+					} else {
+						// Pontos do Jogador 2
+						pontuacaoJogador2 = pontuacaoJogador2 + 1;
+						// Colocar no centro
+						posicaoBolaX = larguraCampo / 2;
+						posicaoBolaY = alturaCampo / 2;
+						velocidadeBolaPosicaoX = -velocidadeBolaPosicaoX;
+						velocidadeBolaPosicaoY = 3;
+					}
+				}
+
+				// Verifica se o Jogador 1 fez um ponto
+				if (posicaoBolaX > larguraCampo) {
+					if (
+						posicaoBolaY > posicaoJogador2 &&
+						posicaoBolaY < posicaoJogador2 + alturaRaquete
+					) {
+						velocidadeBolaPosicaoX = -velocidadeBolaPosicaoX;
+
+						var diferencaY =
+							posicaoBolaY - (posicaoJogador2 + alturaRaquete / 2);
+						velocidadeBolaPosicaoY = diferencaY * efeitoRaquete;
+					} else {
+						// Pontos do Jogador 1
+						pontuacaoJogador1 = pontuacaoJogador1 + 1;
+						// Colocar no centro
+						posicaoBolaX = larguraCampo / 2;
+						posicaoBolaY = alturaCampo / 2;
+						velocidadeBolaPosicaoX = -velocidadeBolaPosicaoX;
+						velocidadeBolaPosicaoY = 3;
+					}
+				}
+
+				// Atualiza a posição Jogador 2
+				if (posicaoJogador2 + alturaRaquete / 2 < posicaoBolaY) {
+					posicaoJogador2 = posicaoJogador2 + velocidadeJogador2;
+				} else {
+					posicaoJogador2 = posicaoJogador2 - velocidadeJogador2;
+				}
+			}
+		</script>
+	</body>
 </html>

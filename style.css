@@ -5,3 +5,14 @@
     box-sizing: border-box;
 }
 
+body {
+    width: 100vw;
+    height: 100vh;
+    background: #111111;
+    text-align: center;
+}
+
+h1 {
+    padding-bottom: 3%;
+    color: aliceblue;
+}

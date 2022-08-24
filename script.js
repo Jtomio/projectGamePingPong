@@ -1,32 +1,38 @@
+// Carrega os primeiros comandos
 window.onload = function () {
-  setInterval(executar, 1000 / 30);
+  iniciar(); // Inicializa os comandos e variavéis
+  setInterval(principal, 1000 / 30);  // Roda o jogo dentro do laço
 };
 
-var folhaDesenho = document.getElementById('folha');
-var areaDesenho = folhaDesenho.getContext('2d');
+function iniciar () {
+  // Função variavéis para medidas do campo 
+  folhaDesenho = document.getElementById('folha');
+  areaDesenho = folhaDesenho.getContext('2d');
 
-var larguraCampo = 600;
-var alturaCampo = 500;
-var espessuraRede = 5;
+  larguraCampo = 600;
+  alturaCampo = 500;
+  espessuraRede = 5;
 
-var diametroBola = 10;
+  diametroBola = 10;
 
-var espessuraRaquete = 11;
-var alturaRaquete = 100;
+  espessuraRaquete = 11;
+  alturaRaquete = 100;
 
-var efeitoRaquete = 0.3;
-var velocidadeJogador2 = 5;
+  efeitoRaquete = 0.3;
+  velocidadeJogador2 = 5;
 
-var posicaoJogador1 = (posicaoJogador2 = 10);
-var posicaoBolaX = (posicaoBolaY = 10);
-var velocidadeBolaPosicaoX = (velocidadeBolaPosicaoY = 5);
-var pontuacaoJogador1 = (pontuacaoJogador2 = 0);
+  posicaoJogador1 = (posicaoJogador2 = 10);
+  posicaoBolaX = (posicaoBolaY = 10);
+  velocidadeBolaPosicaoX = (velocidadeBolaPosicaoY = 5);
+  pontuacaoJogador1 = (pontuacaoJogador2 = 0);
 
-folhaDesenho.addEventListener('mousemove', function (e) {
-  posicaoJogador1 = e.clientY - alturaRaquete / 2;
-});
 
-function executar() {
+  folhaDesenho.addEventListener('mousemove', function (e) {
+    posicaoJogador1 = e.clientY - alturaRaquete / 2;
+  });
+};
+function desenhar () {
+  // Desenha o campo na tela
   areaDesenho.fillStyle = '#286047';
   areaDesenho.fillRect(0, 0, larguraCampo, alturaCampo);
 
@@ -72,7 +78,16 @@ function executar() {
     larguraCampo - 200,
     100,
   );
+};
 
+function principal () {
+  //Chama as funções de desenhar campo e calcular jogada
+  desenhar ();
+  calcular ();
+};
+
+function calcular() {
+  // Calcula as jogadas raquetes e bola.
   posicaoBolaX = posicaoBolaX + velocidadeBolaPosicaoX;
   posicaoBolaY = posicaoBolaY + velocidadeBolaPosicaoY;
 
@@ -101,11 +116,8 @@ function executar() {
     } else {
       // Pontos do Jogador 2
       pontuacaoJogador2 = pontuacaoJogador2 + 1;
-      // Colocar no centro
-      posicaoBolaX = larguraCampo / 2;
-      posicaoBolaY = alturaCampo / 2;
-      velocidadeBolaPosicaoX = -velocidadeBolaPosicaoX;
-      velocidadeBolaPosicaoY = 3;
+      //Chama a função para colocar a bola no centro
+      continuar();
     }
   }
 
@@ -123,11 +135,8 @@ function executar() {
     } else {
       // Pontos do Jogador 1
       pontuacaoJogador1 = pontuacaoJogador1 + 1;
-      // Colocar no centro
-      posicaoBolaX = larguraCampo / 2;
-      posicaoBolaY = alturaCampo / 2;
-      velocidadeBolaPosicaoX = -velocidadeBolaPosicaoX;
-      velocidadeBolaPosicaoY = 3;
+      //Chama a função para colocar a bola no centro
+      continuar();
     }
   }
 
@@ -137,4 +146,12 @@ function executar() {
   } else {
     posicaoJogador2 = posicaoJogador2 - velocidadeJogador2;
   }
-}
+};
+
+function continuar () {
+  // Colocar a bola no centro do campo
+  posicaoBolaX = larguraCampo / 2;
+  posicaoBolaY = alturaCampo / 2;
+  velocidadeBolaPosicaoX = -velocidadeBolaPosicaoX;
+  velocidadeBolaPosicaoY = 3;
+};
